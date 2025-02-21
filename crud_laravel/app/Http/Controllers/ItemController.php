@@ -44,7 +44,7 @@ class ItemController extends Controller
         return view('items.show', compact('item'));
     }
 
-    // Menampilkan view edit.
+    // Menampilkan view edit berdasarkan id.
     public function edit(string $id)
     {
         return view('items.edit', compact('item'));
