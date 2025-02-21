@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+/* Route::resource berfungsi untuk membuat 7 route url (index, store, create, show,
+   edit, update, destroy) sesuai dengan method yang ada pada controller. */
+Route::resource('items', ItemController::class);
