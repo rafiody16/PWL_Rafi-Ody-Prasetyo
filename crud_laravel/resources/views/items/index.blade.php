@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>Items</h1>
+    {{-- Berfungsi untuk pengecekkan pesan 'success' pada session --}}
     @if (session('success'))
         <p>{{ session('success') }}</p>
     @endif
