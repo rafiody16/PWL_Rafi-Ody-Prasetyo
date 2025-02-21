@@ -17,7 +17,9 @@
     <ul>
         @foreach ($items as $item)
             <li>
+                {{-- Menampilkan data name --}}
                 {{ $item->name }}
+                {{-- Menampilkan data stock --}}
                 {{ $item->stock }}
                 {{-- Mengubah data sesuai dengan baris data yang dipilih --}}
                 <a href="{{ route('items.edit', $item) }}">Edit</a>
