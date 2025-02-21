@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     use HasFactory;
+
+    //$fillabel digunakan untuk melindungi kolom mana saja yang boleh diisi.
+    protected $fillabel = [
+        'name',
+        'description',
+        'stock'
+    ];
 }
