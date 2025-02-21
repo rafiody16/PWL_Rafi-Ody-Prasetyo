@@ -10,9 +10,5 @@ class Item extends Model
     use HasFactory;
 
     //$fillabel digunakan untuk melindungi kolom mana saja yang boleh diisi.
-    protected $fillabel = [
-        'name',
-        'description',
-        'stock'
-    ];
+    protected $fillable = ['name', 'description', 'stock'];
 }
