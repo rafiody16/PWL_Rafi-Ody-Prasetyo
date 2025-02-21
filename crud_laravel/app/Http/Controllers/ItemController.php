@@ -38,14 +38,14 @@ class ItemController extends Controller
         return redirect()->route('items.index')->with('success', 'Item added successfully.');
     }
 
-    // Menampilkan data berdasarkan id.
-    public function show(string $id)
+    // Menampilkan data berdasarkan data yang dipilih.
+    public function show(Item $item)
     {
         return view('items.show', compact('item'));
     }
 
-    // Menampilkan view edit berdasarkan id.
-    public function edit(string $id)
+    // Menampilkan view edit berdasarkan data yang dipilih.
+    public function edit(Item $item)
     {
         return view('items.edit', compact('item'));
     }

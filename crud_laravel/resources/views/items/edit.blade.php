@@ -8,7 +8,7 @@
 <body>
     <h1>Add Item</h1>
     {{-- Form untuk memproses dan menginputkan data yang ingin diubah. --}}
-    <form action="{{ route('items.store') }}" method="POST">
+    <form action="{{ route('items.update', $item) }}" method="POST">
         {{-- Token CSRF untuk mengamankan form. --}}
         @csrf
         {{-- Memanggil method untuk update data. --}}
