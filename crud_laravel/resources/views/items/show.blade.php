@@ -23,9 +23,10 @@
                 <a href="{{ route('items.edit', $item) }}">Edit</a>
                 {{-- Form digunakan untuk menghapus data --}}
                 <form action="{{ route('items.destroy', $item) }}" method="POST" style="display:inline;">
-                    {{-- Token csrf untuk mengamankan form --}}
+                    {{-- Token csrf untuk melindungi form --}}
                     @csrf
-                    {{-- Method DELETE digunakan untuk memproses penghapusan data --}}
+                    {{-- Method ini digunakan untuk mengubah method POST menjadi DELETE. Karena pada method
+                         form hanya ada 2 method yaitu GET dan POST.  --}}
                     @method('DELETE')
                     {{-- Tombol untuk menghapus data --}}
                     <button type="submit">Delete</button>

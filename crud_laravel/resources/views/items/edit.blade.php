@@ -9,10 +9,13 @@
     <h1>Add Item</h1>
     {{-- Form untuk memproses dan menginputkan data yang ingin diubah. --}}
     <form action="{{ route('items.update', $item) }}" method="POST">
-        {{-- Token CSRF untuk mengamankan form. --}}
+        {{-- Token csrf untuk melindungi form --}}
         @csrf
-        {{-- Memanggil method untuk update data. --}}
+
+        {{-- Method ini digunakan untuk mengubah method POST menjadi PUT. Karena pada method
+             form hanya ada 2 method yaitu GET dan POST.  --}}
         @method('PUT')
+
         {{-- Value digunakan agar form otomatis terisi dengan data yang sudah ada
         sehingga user dapat memilih data yang ingin diubah. --}}
         <label for="name">Name:</label>

@@ -16,6 +16,7 @@ class ItemController extends Controller
     // Menampilkan view create.
     public function create()
     {
+        // Menampilkan halaman create yang digunakan untuk menambahkan data.
         return view('items.create');
     }
 
@@ -41,12 +42,14 @@ class ItemController extends Controller
     // Menampilkan data berdasarkan data yang dipilih.
     public function show(Item $item)
     {
+        // Menampilkan halaman show dengan mengirimkan data $item kedalam view menggunakan compact('item').
         return view('items.show', compact('item'));
     }
 
     // Menampilkan view edit berdasarkan data yang dipilih.
     public function edit(Item $item)
     {
+        // Menampilkan halaman edit dengan mengirimkan data $item kedalam view menggunakan compact('item').
         return view('items.edit', compact('item'));
     }
 

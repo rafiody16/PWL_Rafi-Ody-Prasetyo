@@ -9,7 +9,7 @@
     <h1>Add Item</h1>
     {{-- Form untuk memproses dan menginputkan data kedalam tabel item. --}}
     <form action="{{ route('items.store') }}" method="POST">
-        {{-- Token CSRF untuk mengamankan form. --}}
+        {{-- Token csrf untuk melindungi form --}}
         @csrf
         <label for="name">Name:</label>
         <input type="text" name="name" required>
