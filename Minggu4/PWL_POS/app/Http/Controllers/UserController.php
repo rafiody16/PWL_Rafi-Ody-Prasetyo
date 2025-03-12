@@ -51,9 +51,9 @@ class UserController extends Controller
         // });
         // return view('user', ['data' => $user]);
 
-        // $user = UserModel::findOr(20, ['username', 'nama'], function() {
-        //     abort(404);
-        // });
-        // return view('user', ['data' => $user]);
+        $user = UserModel::findOr(20, ['username', 'nama'], function() {
+            abort(404);
+        });
+        return view('user', ['data' => $user]);
     }
 }
