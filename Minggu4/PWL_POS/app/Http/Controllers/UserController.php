@@ -10,6 +10,7 @@ class UserController extends Controller
 {
     public function index()
     {
+        // <--- Jobsheet 3 --->
         // $data = [
         //     'username' => 'customer-1',
         //     'nama' => 'Pelanggan',
@@ -18,10 +19,20 @@ class UserController extends Controller
         // ];
         // UserModel::insert($data);
 
+        // $data = [
+        //     'nama' => 'Pelanggan Pertama'
+        // ];
+        // UserModel::where('username', 'customer-1')->update($data);
+
+        // <--- Jobsheet 4 --->
+
         $data = [
-            'nama' => 'Pelanggan Pertama'
+            'level_id' => 2,
+            'username' => 'manager_tiga',
+            'nama' => 'Manager 3',
+            'password' => Hash::make('12345'),
         ];
-        UserModel::where('username', 'customer-1')->update($data);
+        UserModel::create($data);
 
         $user = UserModel::all();
         return view('user', ['user' => $user]);
