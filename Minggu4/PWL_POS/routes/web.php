@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SalesController;
 use App\Http\Controllers\UserController;
 
 
@@ -20,6 +22,19 @@ use App\Http\Controllers\UserController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Jobsheet 2
+// Route::prefix('category')->group(function () {
+//     Route::get('/food-beverage', [ProductController::class, 'foodBeverage']);
+//     Route::get('/beauty-health', [ProductController::class, 'beautyHealth']);
+//     Route::get('/home-care', [ProductController::class, 'homeCare']);
+//     Route::get('/baby-kid', [ProductController::class, 'babyKid']);
+// });
+
+// Route::get('/user/{id}/name/{name}', [UserController::class, 'profile']);
+
+// Route::get('/sales', [SalesController::class, 'index']);
+
 // Jobsheet 3
 // Praktikum 4
 Route::get('/level', [LevelController::class, 'index']);
