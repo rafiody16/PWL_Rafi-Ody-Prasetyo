@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    // <--- Jobsheet 2 --->
+    // public function profile($id, $name)
+    // {
+    //     return view('user.profile')->with('id', $id)->with('name', $name);
+    // }
+
     public function index()
     {
         // <--- Jobsheet 3 --->
@@ -25,6 +31,7 @@ class UserController extends Controller
         // UserModel::where('username', 'customer-1')->update($data);
 
         // <--- Jobsheet 4 --->
+        // ** Praktikum 1 Fillable **
 
         // $data = [
         //     'level_id' => 2,
@@ -44,6 +51,8 @@ class UserController extends Controller
         // ];
         // UserModel::create($data);
 
+        // ** Praktikum 2.1 Retrieving Single Models **
+
         // $user = UserModel::all();
 
         // $user  = UserModel::find(1);
@@ -60,12 +69,18 @@ class UserController extends Controller
         //     abort(404);
         // });
 
+        // ** Praktikum 2.2 Not Found Exceptions **
+
         // $user = UserModel::findOrFail(1);
 
         // $user = UserModel::where('username', 'manager9')->firstOrFail();
 
+        // ** Praktikum 2.3 Retreiving Aggregrates **
+
         // $user = UserModel::where('level_id', 2)->count();
         // dd($user);
+
+        // ** Praktikum 2.4 Retreiving or Creating Models **
 
         // $user = UserModel::firstOrCreate(
         //     [
@@ -108,6 +123,8 @@ class UserController extends Controller
         // $user->save();
 
         // return view('user', ['data' => $user]);
+
+        // ** Praktikum 2.5 Attribute Changes **
 
         // $user = UserModel::create(
         //     [
@@ -155,8 +172,12 @@ class UserController extends Controller
         // $user->wasChanged('nama'); // false
         // dd($user->wasChanged(['nama', 'username'])); // true
 
+        // ** Praktikum 2.6 CRUD **
+
         // $user = UserModel::all();
         // return view('user', ['data' => $user]);
+
+        // ** Praktikum 2.7 Relationship **
 
         $user = UserModel::with('level')->get();
         // dd($user);

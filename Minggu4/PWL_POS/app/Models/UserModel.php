@@ -11,10 +11,10 @@ class UserModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'm_user';
-    protected $primaryKey = 'user_id';
+    protected $table = 'm_user'; // mendeklarasikan nama tabel
+    protected $primaryKey = 'user_id'; // mendeklarasikan primary key
 
-    protected $fillable = ['level_id', 'username', 'nama', 'password'];
+    protected $fillable = ['level_id', 'username', 'nama', 'password']; // mendaftarkan atribut (nama kolom) yang bisa kita isi ketika melakukan insert atau update ke database.
 
     // protected $fillable = ['level_id', 'username', 'nama'];
 
