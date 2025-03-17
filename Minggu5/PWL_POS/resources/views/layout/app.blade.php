@@ -7,14 +7,16 @@
     @hasSection('subtitle') | @yield('subtitle') @endif
 @stop
 
+@vite('resources/js/app.js')
+
 {{-- Extend and customize the page content header --}}
 
 @section('content_header')
     @hasSection('content_header_title')
         <h1 class="text-muted">
-            @yield('content_header_subtitle')
+            @yield('content_header_title')
 
-            @hasSection ('name')
+            @hasSection ('content_header_subtitle')
                <small class="text-dark">
                     <i class="fas fa-xs fa-angle-right text-muted"></i>
                     @yield('content_header_subtitle')
@@ -47,7 +49,7 @@
 {{-- Add common Javascript/Jquery code --}}
 
 @push('js')
-<script>
+<script src="https://cdn.datatables.net/2.0.2/js/dataTables.js">
     $(document).ready(function() {
         // your common script logic here
     });
@@ -56,6 +58,7 @@
 
 {{-- Add common CSS customizations --}}
 @push('css')
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css">
 <style type="text/css">
     /*
     .card-header {
