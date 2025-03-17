@@ -49,7 +49,7 @@
 @push('js')
 <script>
     $(document).ready(function() {
-
+        // your common script logic here
     });
 </script>
 @endpush
