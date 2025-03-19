@@ -23,7 +23,15 @@ class KategoriDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($row) {
-                return '<a href="../kategori/edit/'.$row->kategori_id.'" class="btn btn-sm btn-warning">Edit</a>';
+                return '
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="../kategori/edit/' . $row->kategori_id . '" class="btn btn-sm btn-warning text-nowrap">Edit</a>
+                        <form action="/kategori/' . $row->kategori_id . '" method="POST" class="m-0 p-0">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-sm btn-danger text-nowrap">Delete</button>
+                        </form>
+                    </div>
+                ';
             })
             ->rawColumns(['action'])
             ->setRowId('id');
