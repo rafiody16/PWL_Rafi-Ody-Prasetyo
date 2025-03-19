@@ -50,11 +50,13 @@
 
 @push('js')
 <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js">
-    $(document).ready(function() {
+    // $(document).ready(function() {
         // your common script logic here
-    });
+    // });
 </script>
 @endpush
+
+@stack('scripts')
 
 {{-- Add common CSS customizations --}}
 @push('css')
