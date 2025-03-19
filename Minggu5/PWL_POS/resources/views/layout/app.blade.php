@@ -49,11 +49,10 @@
 {{-- Add common Javascript/Jquery code --}}
 
 @push('js')
-<script src="https://cdn.datatables.net/2.0.2/js/dataTables.js">
-    // $(document).ready(function() {
-        // your common script logic here
-    // });
-</script>
+<script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
+    {{--  $(document).ready(function() {
+     your common script logic here
+     }); --}}
 @endpush
 
 @stack('scripts')
