@@ -6,6 +6,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\WelcomeController;
 
 
@@ -65,6 +66,17 @@ Route::group(['prefix' => 'user'], function () {
     Route::delete('/{id}', [UserController::class, 'destroy']);
     Route::get('/{id}/edit', [UserController::class, 'edit']);
     Route::get('/{id}', [UserController::class, 'show']);
+});
+
+Route::group(['prefix' => 'supplier'], function () {
+    Route::get('/', [SupplierController::class, 'index']);
+    Route::post('/list', [SupplierController::class, 'list']);
+    Route::get('/create', [SupplierController::class, 'create']);
+    Route::post('/', [SupplierController::class, 'store']);
+    Route::put('/{id}', [SupplierController::class, 'update']);
+    Route::delete('/{id}', [SupplierController::class, 'destroy']);
+    Route::get('/{id}/edit', [SupplierController::class, 'edit']);
+    Route::get('/{id}', [SupplierController::class, 'show']);
 });
 
 
