@@ -79,5 +79,15 @@ Route::group(['prefix' => 'supplier'], function () {
     Route::get('/{id}', [SupplierController::class, 'show']);
 });
 
+Route::group(['prefix' => 'level'], function () {
+    Route::get('/', [LevelController::class, 'index']);
+    Route::post('/list', [LevelController::class, 'list']);
+    Route::get('/create', [LevelController::class, 'create']);
+    Route::post('/', [LevelController::class, 'store']);
+    Route::put('/{id}', [LevelController::class, 'update']);
+    Route::delete('/{id}', [LevelController::class, 'destroy']);
+    Route::get('/{id}/edit', [LevelController::class, 'edit']);
+    Route::get('/{id}', [LevelController::class, 'show']);
+});
 
 
