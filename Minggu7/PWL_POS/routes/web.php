@@ -59,7 +59,7 @@ use App\Http\Controllers\AuthController;
 // Jobsheet 7
 Route::pattern('id', '[0-9]+');
 //Registrasi
-Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
 
