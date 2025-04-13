@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\BarangController;
 use App\Http\Controllers\WelcomeController;
 
 
@@ -99,6 +100,17 @@ Route::group(['prefix' => 'kategori'], function () {
     Route::delete('/{id}', [KategoriController::class, 'destroy']);
     Route::get('/{id}/edit', [KategoriController::class, 'edit']);
     Route::get('/{id}', [KategoriController::class, 'show']);
+});
+
+Route::group(['prefix' => 'barang'], function () {
+    Route::get('/', [BarangController::class, 'index']);
+    Route::post('/list', [BarangController::class, 'list']);
+    Route::get('/create', [BarangController::class, 'create']);
+    Route::post('/', [BarangController::class, 'store']);
+    Route::put('/{id}', [BarangController::class, 'update']);
+    Route::delete('/{id}', [BarangController::class, 'destroy']);
+    Route::get('/{id}/edit', [BarangController::class, 'edit']);
+    Route::get('/{id}', [BarangController::class, 'show']);
 });
 
 
