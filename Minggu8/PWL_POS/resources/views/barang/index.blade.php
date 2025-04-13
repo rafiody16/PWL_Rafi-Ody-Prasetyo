@@ -11,6 +11,8 @@
                 {{-- <a class="btn btn-sm btn-primary mt-1" href="{{ url('barang/create') }}">Tambah</a> --}}
                 <a class="btn btn-sm btn-primary mt-1" href="{{ url('/barang/export_excel') }}"><i
                         class="fa fa-file-excel">Export Barang</i></a>
+                <a class="btn btn-sm btn-warning mt-1" href="{{ url('/barang/export_pdf') }}"><i
+                        class="fa fa-file-pdf">Export Barang</i></a>
                 <button onclick="modalAction('{{ url('barang/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah
                     Ajax</button>
             </div>
