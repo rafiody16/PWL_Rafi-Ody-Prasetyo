@@ -50,6 +50,8 @@ class StokController extends Controller
             $stoks->where('supplier_id', $request->supplier_id);
         } else if ($request->barang_id) {
             $stoks->where('barang_id', $request->barang_id);
+        } else if ($request->user_id) {
+            $stoks->where('user_id', $request->user_id);
         }
 
         return DataTables::of($stoks)

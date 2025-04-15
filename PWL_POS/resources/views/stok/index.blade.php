@@ -5,16 +5,16 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                {{-- <button onclick="modalAction('{{ url('/stok/import') }}')" class="btn btn-sm btn-info mt-1">
+                <button onclick="modalAction('{{ url('/stok/import') }}')" class="btn btn-sm btn-info mt-1">
                     Import stok
-                </button> --}}
+                </button>
                 {{-- <a class="btn btn-sm btn-primary mt-1" href="{{ url('stok/create') }}">Tambah</a> --}}
-                {{-- <a class="btn btn-sm btn-primary mt-1" href="{{ url('/stok/export_excel') }}"><i
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('/stok/export_excel') }}"><i
                         class="fa fa-file-excel">Export stok</i></a>
                 <a class="btn btn-sm btn-warning mt-1" href="{{ url('/stok/export_pdf') }}"><i class="fa fa-file-pdf">Export
                         stok</i></a>
                 <button onclick="modalAction('{{ url('stok/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah
-                    Ajax</button> --}}
+                    Ajax</button>
             </div>
         </div>
         <div class="card-body">
@@ -50,11 +50,11 @@
                         <div class="col-3">
                             <select class="form-control" id="user_id" name="user_id" required>
                                 <option value="">- User -</option>
-                                @foreach ($barang as $item)
-                                    <option value="{{ $item->barang_id }}">{{ $item->barang_nama }}</option>
+                                @foreach ($user as $item)
+                                    <option value="{{ $item->user_id }}">{{ $item->nama }}</option>
                                 @endforeach
                             </select>
-                            <small class="form-text text-muted">Barang stok</small>
+                            <small class="form-text text-muted">User stok</small>
                         </div>
                     </div>
                 </div>
@@ -99,6 +99,7 @@
                         "data": function(d) {
                             d.supplier_id = $('#supplier_id').val();
                             d.barang_id = $('#barang_id').val();
+                            d.user_Id = $('#user_id').val();
                         }
                     },
                     columns: [{
@@ -153,6 +154,9 @@
                     dataStok.ajax.reload();
                 });
                 $('#barang_id').on('change', function() {
+                    dataStok.ajax.reload();
+                });
+                $('#user_id').on('change', function() {
                     dataStok.ajax.reload();
                 });
             });
