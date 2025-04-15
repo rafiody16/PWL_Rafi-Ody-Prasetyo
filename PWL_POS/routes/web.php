@@ -3,8 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\KategoriController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\SalesController;
+use App\Http\Controllers\StokController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\BarangController;
@@ -141,6 +140,19 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}', [BarangController::class, 'destroy']);
             Route::get('/{id}/edit', [BarangController::class, 'edit']);
             Route::get('/{id}', [BarangController::class, 'show']);
+        });
+
+        Route::group(['prefix' => 'stok'], function () {
+            Route::get('/create_ajax', [StokController::class, 'create_ajax']);
+            Route::post('/ajax', [StokController::class, 'store_ajax']);
+            Route::get('/{id}/edit_ajax', [StokController::class, 'edit_ajax']);
+            Route::put('/{id}/update_ajax', [StokController::class, 'update_ajax']);
+            Route::get('/{id}/delete_ajax', [StokController::class, 'confirm_ajax']);
+            Route::delete('/{id}/delete_ajax', [StokController::class, 'delete_ajax']);
+            Route::get('/{id}/show_ajax', [StokController::class, 'show_ajax']);
+
+            Route::get('/', [StokController::class, 'index']);
+            Route::post('/list', [StokController::class, 'list']);
         });
     });
 
