@@ -6,7 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PenjualanModel;
 use App\Models\UserModel;
+use App\Models\BarangModel;
+use App\Models\PenjualanDetailModel;
+use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\Catch_;
+use Illuminate\Support\Facades\Log;
 
 class PenjualanController extends Controller
 {
@@ -34,7 +41,7 @@ class PenjualanController extends Controller
             ->with('user');
 
         if ($request->user_id) {
-            $penjualans->where('supplier_id', $request->user_id);
+            $penjualans->where('user_id', $request->user_id);
         }
 
         return DataTables::of($penjualans)
@@ -57,5 +64,80 @@ class PenjualanController extends Controller
             })
             ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi adalah html
             ->make(true);
+    }
+
+    public function create_ajax()
+    {
+        $barang = BarangModel::select('barang_id', 'barang_nama', 'harga_jual')->get();
+        $user = UserModel::select('user_id', 'nama')->get();
+
+        return view('penjualan.create_ajax')
+            ->with('barang', $barang)
+            ->with('user', $user);
+    }
+
+    public function store_ajax(Request $request)
+    {
+        $rules = [
+            'user_id' => 'required|integer',
+            'pembeli' => 'required|string|max:50',
+            'penjualan_kode' => 'required|string|max:20',
+            'penjualan_tanggal' => 'required|date',
+            'barang_id.*' => 'required|integer',
+            'harga.*' => 'required|numeric',
+            'jumlah.*' => 'required|numeric',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi Gagal',
+                'msgField' => $validator->errors(),
+            ]);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $penjualan = new PenjualanModel();
+            $penjualan->user_id = $request->user_id;
+            $penjualan->pembeli = $request->pembeli;
+            $penjualan->penjualan_kode = $request->penjualan_kode;
+            $penjualan->penjualan_tanggal = $request->penjualan_tanggal;
+            $penjualan->save();
+
+            foreach ($request->barang_id as $i => $barang_id) {
+                $jumlah = $request->jumlah[$i];
+
+                PenjualanDetailModel::create([
+                    'penjualan_id' => $penjualan->penjualan_id,
+                    'barang_id'    => $barang_id,
+                    'harga'        => $request->harga[$i],
+                    'jumlah'       => $jumlah
+                ]);
+
+                DB::table('t_stok')->where('barang_id', $barang_id)->decrement('stok_jumlah', $jumlah);
+            }
+
+            DB::commit();
+            return response()->json([
+                'status' => true,
+                'message' => 'Data penjualan berhasil disimpan'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Gagal Simpan Penjualan', [
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile()
+            ]);
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal menyimpan data',
+                'msgField' => $e->getMessage(),
+            ], 500);
+        }
     }
 }
