@@ -158,4 +158,11 @@ class PenjualanController extends Controller
             ], 500);
         }
     }
+
+    public function show_ajax(string $id)
+    {
+        $penjualan = PenjualanModel::with('penjualanDetail')->find($id);
+
+        return view('penjualan.show_ajax', ['penjualan' => $penjualan]);
+    }
 }
