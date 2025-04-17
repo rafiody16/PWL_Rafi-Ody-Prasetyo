@@ -40,7 +40,7 @@
                     <div id="detail-container">
                         <div class="row detail-item mb-2">
                             <div class="col-md-4">
-                                <select name="barang_id[]" class="form-control" required>
+                                <select name="barang_id[]" id="barang_id[]" class="form-control" required>
                                     <option value="">- Pilih Barang -</option>
                                     @foreach ($barang as $l)
                                         <option value="{{ $l->barang_id }}">{{ $l->barang_nama }}</option>
@@ -48,11 +48,12 @@
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <input type="number" name="harga[]" class="form-control" placeholder="Harga" required>
+                                <input type="number" name="harga[]" id="harga[]" class="form-control"
+                                    placeholder="Harga" required>
                             </div>
                             <div class="col-md-3">
-                                <input type="number" name="jumlah[]" class="form-control" placeholder="Jumlah"
-                                    required>
+                                <input type="number" name="jumlah[]" id="jumlah[]" class="form-control"
+                                    placeholder="Jumlah" required>
                             </div>
                             <div class="col-md-2">
                                 <button type="button" class="btn btn-danger btn-remove">Hapus</button>
@@ -77,7 +78,7 @@
             let detailRow = `
             <div class="row detail-item mb-2">
                 <div class="col-md-4">
-                    <select name="barang_id[]" class="form-control" required>
+                    <select name="barang_id[]" id="barang_id[]" class="form-control" required>
                         <option value="">- Pilih Barang -</option>
                         @foreach ($barang as $l)
                             <option value="{{ $l->barang_id }}">{{ $l->barang_nama }}</option>
@@ -85,10 +86,10 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <input type="number" name="harga[]" class="form-control" placeholder="Harga" required>
+                    <input type="number" name="harga[]" id="harga[]" class="form-control" placeholder="Harga" required>
                 </div>
                 <div class="col-md-3">
-                    <input type="number" name="jumlah[]" class="form-control" placeholder="Jumlah" required>
+                    <input type="number" name="jumlah[]" id="jumlah[]" class="form-control" placeholder="Jumlah" required>
                 </div>
                 <div class="col-md-2">
                     <button type="button" class="btn btn-danger btn-remove">Hapus</button>

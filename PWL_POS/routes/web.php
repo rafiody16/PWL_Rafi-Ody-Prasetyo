@@ -62,20 +62,6 @@ Route::pattern('id', '[0-9]+');
 Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
-Route::group(['prefix' => 'penjualan'], function () {
-    Route::get('/create_ajax', [PenjualanController::class, 'create_ajax']);
-    Route::post('/ajax', [PenjualanController::class, 'store_ajax']);
-    Route::get('/{id}/edit_ajax', [PenjualanController::class, 'edit_ajax']);
-    Route::put('/{id}/update_ajax', [PenjualanController::class, 'update_ajax']);
-    Route::get('/{id}/delete_ajax', [PenjualanController::class, 'confirm_ajax']);
-    Route::delete('/{id}/delete_ajax', [PenjualanController::class, 'delete_ajax']);
-    Route::get('/{id}/show_ajax', [PenjualanController::class, 'show_ajax']);
-
-    Route::get('/', [PenjualanController::class, 'index']);
-    Route::post('/list', [PenjualanController::class, 'list']);
-});
-
-
 Route::get('/home', [AuthController::class, 'home'])->name('home');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'postlogin']);
@@ -167,6 +153,21 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('/', [StokController::class, 'index']);
             Route::post('/list', [StokController::class, 'list']);
+        });
+    });
+
+    Route::middleware(['authorize:ADM, MNG, STF'])->group(function () {
+        Route::group(['prefix' => 'penjualan'], function () {
+            Route::get('/create_ajax', [PenjualanController::class, 'create_ajax']);
+            Route::post('/ajax', [PenjualanController::class, 'store_ajax']);
+            Route::get('/{id}/edit_ajax', [PenjualanController::class, 'edit_ajax']);
+            Route::put('/{id}/update_ajax', [PenjualanController::class, 'update_ajax']);
+            Route::get('/{id}/delete_ajax', [PenjualanController::class, 'confirm_ajax']);
+            Route::delete('/{id}/delete_ajax', [PenjualanController::class, 'delete_ajax']);
+            Route::get('/{id}/show_ajax', [PenjualanController::class, 'show_ajax']);
+
+            Route::get('/', [PenjualanController::class, 'index']);
+            Route::post('/list', [PenjualanController::class, 'list']);
         });
     });
 
