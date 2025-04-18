@@ -320,4 +320,62 @@ class SupplierController extends Controller
         }
         return redirect('/');
     }
+
+    public function export_pdf()
+    {
+        $supplier = SupplierModel::select('supplier_kode', 'supplier_nama', 'supplier_alamat')->get();
+
+        $pdf = Pdf::loadView('supplier.export_pdf', ['supplier' => $supplier]);
+        $pdf->setPaper('a4', 'potrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render();
+
+        return $pdf->stream('Data Supplier ' . date('Y-m-d H:i:s') . '.pdf');
+    }
+
+    public function export_excel()
+    {
+        $supplier = SupplierModel::select('supplier_kode', 'supplier_nama', 'supplier_alamat')->get();
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Kode Supplier');
+        $sheet->setCellValue('C1', 'Nama Supplier');
+        $sheet->setCellValue('D1', 'Alamat Supplier');
+
+        $sheet->getStyle('A1:F1')->getFont()->setBold(true);
+        $no = 1;
+        $baris = 2;
+        foreach ($supplier as $key => $value) {
+            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('B' . $baris, $value->supplier_kode);
+            $sheet->setCellValue('C' . $baris, $value->supplier_nama);
+            $sheet->setCellValue('D' . $baris, $value->supplier_alamat);
+            $baris++;
+            $no++;
+        }
+
+        foreach (range('A', 'F') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $sheet->setTitle('Data Supplier');
+
+        $write = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Data Supplier' . date('Y-m-d H:i:s') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        header('Cache-Control: max-age=1');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last Modified: ' . gmdate('D, d M Y H:i:s') . 'GMT');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+
+        $write->save('php://output');
+        exit;
+    }
 }
