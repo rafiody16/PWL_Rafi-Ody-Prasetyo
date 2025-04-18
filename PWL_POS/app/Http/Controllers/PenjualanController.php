@@ -8,7 +8,6 @@ use App\Models\PenjualanModel;
 use App\Models\UserModel;
 use App\Models\BarangModel;
 use App\Models\PenjualanDetailModel;
-use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -124,20 +123,17 @@ class PenjualanController extends Controller
             $penjualan->penjualan_tanggal = $request->penjualan_tanggal;
             $penjualan->save();
 
-            $detailData = [];
             foreach ($request->barang_id as $i => $barang_id) {
-
                 $jumlah = $request->jumlah[$i];
-                $detailData[] = [
+                PenjualanDetailModel::create([
+                    'penjualan_id' => $penjualan->penjualan_id,
                     'barang_id' => $barang_id,
                     'jumlah' => $jumlah ?? 0,
                     'harga' => $request->harga[$i] * $jumlah ?? 0,
-                ];
+                ]);
 
                 DB::table('t_stok')->where('barang_id', $barang_id)->decrement('stok_jumlah', $jumlah);
             }
-
-            $penjualan->penjualanDetail()->createMany($detailData);
 
             DB::commit();
             return response()->json([
@@ -164,5 +160,168 @@ class PenjualanController extends Controller
         $penjualan = PenjualanModel::with('penjualanDetail')->find($id);
 
         return view('penjualan.show_ajax', ['penjualan' => $penjualan]);
+    }
+
+    public function edit_ajax(string $id)
+    {
+        $penjualan = PenjualanModel::with('penjualanDetail')->find($id);
+        $user = UserModel::select('user_id', 'nama')->get();
+        $barang = BarangModel::select('barang_id', 'barang_nama')->get();
+
+        return view('penjualan.edit_ajax', ['penjualan' => $penjualan, 'user' => $user, 'barang' => $barang]);
+    }
+
+    // public function update_ajax(Request $request, $id)
+    // {
+    //     foreach ($request->barang_id as $i => $barang_id) {
+    //         $jumlah = $request->jumlah[$i];
+    //         $stok = DB::table('t_stok')->where('barang_id', $barang_id)->value('stok_jumlah');
+    //         $brg = DB::table('m_barang')->where('barang_id', $barang_id)->value('barang_nama');
+
+    //         if ($stok < $jumlah) {
+    //             DB::rollBack();
+    //             return response()->json([
+    //                 'status' => false,
+    //                 'message' => "Stok barang " . $brg . " tidak mencukupi. Sisa stok: " . $stok . ", dibutuhkan: " . $jumlah,
+    //             ]);
+    //         }
+    //     }
+
+    //     if ($request->ajax() || $request->wantsJson()) {
+    //         $rules = [
+    //             'user_id' => 'required|integer',
+    //             'pembeli' => 'required|string|max:50',
+    //             'penjualan_kode' => 'required|string|max:20',
+    //             'penjualan_tanggal' => 'required|date',
+    //         ];
+
+    //         $validator = Validator::make($request->all(), $rules);
+
+    //         if ($validator->fails()) {
+    //             return response()->json([
+    //                 'status' => false,    // respon json, true: berhasil, false: gagal 
+    //                 'message' => 'Validasi gagal.',
+    //                 'msgField' => $validator->errors()  // menunjukkan field mana yang error 
+    //             ]);
+    //         }
+
+    //         DB::beginTransaction();
+
+    //         $check = PenjualanModel::find($id);
+    //         if ($check) {
+    //             $check->update($request->all());
+    //             foreach ($request->barang_id as $i => $barang_id) {
+    //                 $jumlah = $request->jumlah[$i];
+    //                 PenjualanDetailModel::update([
+    //                     'penjualan_id' => $check->penjualan_id,
+    //                     'barang_id' => $barang_id,
+    //                     'jumlah' => $jumlah ?? 0,
+    //                     'harga' => $request->harga[$i] * $jumlah ?? 0,
+    //                 ]);
+
+    //                 DB::table('t_stok')->where('barang_id', $barang_id)->decrement('stok_jumlah', $jumlah);
+    //             }
+    //             return response()->json([
+    //                 'status' => true,
+    //                 'message' => 'Data berhasil diupdate'
+    //             ]);
+    //         } else {
+    //             return response()->json([
+    //                 'status' => false,
+    //                 'message' => 'Data tidak ditemukan'
+    //             ]);
+    //         }
+    //     }
+    //     return redirect('/');
+    // }
+
+    public function update_ajax(Request $request, $id)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'user_id' => 'required|integer',
+                'pembeli' => 'required|string|max:50',
+                'penjualan_kode' => 'required|string|max:20',
+                'penjualan_tanggal' => 'required|date',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi gagal.',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+
+            DB::beginTransaction();
+
+            try {
+                $penjualan = PenjualanModel::find($id);
+                if (!$penjualan) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Data tidak ditemukan'
+                    ]);
+                }
+
+                $detailLama = PenjualanDetailModel::where('penjualan_id', $penjualan->penjualan_id)->get();
+                foreach ($detailLama as $d) {
+                    DB::table('t_stok')->where('barang_id', $d->barang_id)->increment('stok_jumlah', $d->jumlah);
+                }
+
+                PenjualanDetailModel::where('penjualan_id', $penjualan->penjualan_id)->delete();
+
+                foreach ($request->barang_id as $i => $barang_id) {
+                    $jumlah = $request->jumlah[$i];
+                    $stok = DB::table('t_stok')->where('barang_id', $barang_id)->value('stok_jumlah');
+                    $brg = DB::table('m_barang')->where('barang_id', $barang_id)->value('barang_nama');
+
+                    if ($stok < $jumlah) {
+                        DB::rollBack();
+                        return response()->json([
+                            'status' => false,
+                            'message' => "Stok barang \"$brg\" tidak mencukupi. Sisa stok: $stok, dibutuhkan: $jumlah"
+                        ]);
+                    }
+                }
+
+                $penjualan->update([
+                    'user_id' => $request->user_id,
+                    'pembeli' => $request->pembeli,
+                    'penjualan_kode' => $request->penjualan_kode,
+                    'tanggal_penjualan' => $request->penjualan_tanggal,
+                ]);
+
+                foreach ($request->barang_id as $i => $barang_id) {
+                    $jumlah = $request->jumlah[$i];
+                    $harga = $request->harga[$i];
+
+                    PenjualanDetailModel::create([
+                        'penjualan_id' => $penjualan->penjualan_id,
+                        'barang_id' => $barang_id,
+                        'jumlah' => $jumlah,
+                        'harga' => $harga * $jumlah,
+                    ]);
+
+                    DB::table('t_stok')->where('barang_id', $barang_id)->decrement('stok_jumlah', $jumlah);
+                }
+
+                DB::commit();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil diupdate'
+                ]);
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+                ]);
+            }
+        }
+
+        return redirect('/');
     }
 }

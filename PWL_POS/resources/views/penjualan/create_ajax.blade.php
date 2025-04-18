@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Supplier</label>
+                    <label>User</label>
                     <select name="user_id" id="user_id" class="form-control" required>
                         <option value="">- Pilih User -</option>
                         @foreach ($user as $l)
