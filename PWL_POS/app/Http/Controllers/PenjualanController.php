@@ -171,70 +171,6 @@ class PenjualanController extends Controller
         return view('penjualan.edit_ajax', ['penjualan' => $penjualan, 'user' => $user, 'barang' => $barang]);
     }
 
-    // public function update_ajax(Request $request, $id)
-    // {
-    //     foreach ($request->barang_id as $i => $barang_id) {
-    //         $jumlah = $request->jumlah[$i];
-    //         $stok = DB::table('t_stok')->where('barang_id', $barang_id)->value('stok_jumlah');
-    //         $brg = DB::table('m_barang')->where('barang_id', $barang_id)->value('barang_nama');
-
-    //         if ($stok < $jumlah) {
-    //             DB::rollBack();
-    //             return response()->json([
-    //                 'status' => false,
-    //                 'message' => "Stok barang " . $brg . " tidak mencukupi. Sisa stok: " . $stok . ", dibutuhkan: " . $jumlah,
-    //             ]);
-    //         }
-    //     }
-
-    //     if ($request->ajax() || $request->wantsJson()) {
-    //         $rules = [
-    //             'user_id' => 'required|integer',
-    //             'pembeli' => 'required|string|max:50',
-    //             'penjualan_kode' => 'required|string|max:20',
-    //             'penjualan_tanggal' => 'required|date',
-    //         ];
-
-    //         $validator = Validator::make($request->all(), $rules);
-
-    //         if ($validator->fails()) {
-    //             return response()->json([
-    //                 'status' => false,    // respon json, true: berhasil, false: gagal 
-    //                 'message' => 'Validasi gagal.',
-    //                 'msgField' => $validator->errors()  // menunjukkan field mana yang error 
-    //             ]);
-    //         }
-
-    //         DB::beginTransaction();
-
-    //         $check = PenjualanModel::find($id);
-    //         if ($check) {
-    //             $check->update($request->all());
-    //             foreach ($request->barang_id as $i => $barang_id) {
-    //                 $jumlah = $request->jumlah[$i];
-    //                 PenjualanDetailModel::update([
-    //                     'penjualan_id' => $check->penjualan_id,
-    //                     'barang_id' => $barang_id,
-    //                     'jumlah' => $jumlah ?? 0,
-    //                     'harga' => $request->harga[$i] * $jumlah ?? 0,
-    //                 ]);
-
-    //                 DB::table('t_stok')->where('barang_id', $barang_id)->decrement('stok_jumlah', $jumlah);
-    //             }
-    //             return response()->json([
-    //                 'status' => true,
-    //                 'message' => 'Data berhasil diupdate'
-    //             ]);
-    //         } else {
-    //             return response()->json([
-    //                 'status' => false,
-    //                 'message' => 'Data tidak ditemukan'
-    //             ]);
-    //         }
-    //     }
-    //     return redirect('/');
-    // }
-
     public function update_ajax(Request $request, $id)
     {
         if ($request->ajax() || $request->wantsJson()) {
@@ -322,6 +258,36 @@ class PenjualanController extends Controller
             }
         }
 
+        return redirect('/');
+    }
+
+    public function confirm_ajax(string $id)
+    {
+        $penjualan = PenjualanModel::with('penjualanDetail')->find($id);
+
+        return view('penjualan.confirm_ajax', ['penjualan' => $penjualan]);
+    }
+
+    public function delete_ajax(Request $request, $id)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $penjualan = PenjualanModel::with('penjualanDetail')->find($id);
+            if ($penjualan) {
+                PenjualanDetailModel::where('penjualan_id', $penjualan->penjualan_id)->delete();
+                $penjualan->delete();
+                DB::commit();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil dihapus'
+                ]);
+            } else {
+                DB::rollBack();
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+        }
         return redirect('/');
     }
 }
