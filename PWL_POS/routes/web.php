@@ -87,6 +87,11 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
             Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax']);
 
+            Route::get('/import', [UserController::class, 'import']);
+            Route::post('/import_ajax', [UserController::class, 'import_ajax']);
+            Route::get('/export_excel', [UserController::class, 'export_excel']);
+            Route::get('/export_pdf', [UserController::class, 'export_pdf']);
+
             Route::get('/', [UserController::class, 'index']);
             Route::post('/list', [UserController::class, 'list']);
             Route::get('/create', [UserController::class, 'create']);
