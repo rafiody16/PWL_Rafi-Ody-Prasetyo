@@ -111,6 +111,11 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
             Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
 
+            Route::get('/import', [LevelController::class, 'import']);
+            Route::post('/import_ajax', [LevelController::class, 'import_ajax']);
+            Route::get('/export_excel', [LevelController::class, 'export_excel']);
+            Route::get('/export_pdf', [LevelController::class, 'export_pdf']);
+
             Route::get('/', [LevelController::class, 'index']);
             Route::post('/list', [LevelController::class, 'list']);
             Route::get('/create', [LevelController::class, 'create']);
