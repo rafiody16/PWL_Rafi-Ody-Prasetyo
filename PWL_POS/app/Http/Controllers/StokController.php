@@ -264,4 +264,80 @@ class StokController extends Controller
         }
         return redirect('/');
     }
+
+    public function export_pdf()
+    {
+        $stok = StokModel::select('supplier_id', 'barang_id', 'user_id', 'stok_tanggal', 'stok_jumlah')
+            ->orderBy('supplier_id')
+            ->with('supplier')
+            ->orderBy('barang_id')
+            ->with('barang')
+            ->orderBy('user_id')
+            ->with('user')
+            ->get();
+
+        $pdf = Pdf::loadView('stok.export_pdf', ['stok' => $stok]);
+        $pdf->setPaper('a4', 'potrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render();
+
+        return $pdf->stream('Data Stok ' . date('Y-m-d H:i:s') . '.pdf');
+    }
+
+    public function export_excel()
+    {
+        $stok = StokModel::select('supplier_id', 'barang_id', 'user_id', 'stok_tanggal', 'stok_jumlah')
+            ->orderBy('supplier_id')
+            ->with('supplier')
+            ->orderBy('barang_id')
+            ->with('barang')
+            ->orderBy('user_id')
+            ->with('user')
+            ->get();
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Supplier');
+        $sheet->setCellValue('C1', 'Barang');
+        $sheet->setCellValue('D1', 'User');
+        $sheet->setCellValue('E1', 'Stok Tanggal');
+        $sheet->setCellValue('F1', 'Stok Jumlah');
+
+        $sheet->getStyle('A1:F1')->getFont()->setBold(true);
+        $no = 1;
+        $baris = 2;
+        foreach ($stok as $key => $value) {
+            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('B' . $baris, $value->supplier->supplier_nama);
+            $sheet->setCellValue('C' . $baris, $value->barang->barang_nama);
+            $sheet->setCellValue('D' . $baris, $value->user->nama);
+            $sheet->setCellValue('E' . $baris, $value->stok_tanggal);
+            $sheet->setCellValue('F' . $baris, $value->stok_jumlah);
+            $baris++;
+            $no++;
+        }
+
+        foreach (range('A', 'F') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $sheet->setTitle('Data Stok');
+
+        $write = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Data Stok' . date('Y-m-d H:i:s') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        header('Cache-Control: max-age=1');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last Modified: ' . gmdate('D, d M Y H:i:s') . 'GMT');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+
+        $write->save('php://output');
+        exit;
+    }
 }
