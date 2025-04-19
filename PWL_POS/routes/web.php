@@ -161,6 +161,12 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}/delete_ajax', [StokController::class, 'delete_ajax']);
             Route::get('/{id}/show_ajax', [StokController::class, 'show_ajax']);
 
+            Route::get('/import', [StokController::class, 'import']);
+            Route::post('/import_ajax', [StokController::class, 'import_ajax']);
+            Route::get('/export_excel', [StokController::class, 'export_excel']);
+            Route::get('/export_pdf', [StokController::class, 'export_pdf']);
+
+
             Route::get('/', [StokController::class, 'index']);
             Route::post('/list', [StokController::class, 'list']);
         });
