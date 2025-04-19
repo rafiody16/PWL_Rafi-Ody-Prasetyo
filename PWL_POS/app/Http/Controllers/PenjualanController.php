@@ -431,4 +431,92 @@ class PenjualanController extends Controller
         $write->save('php://output');
         exit;
     }
+
+    public function export_pdfdtl(string $id)
+    {
+        $penjualan = PenjualanModel::with('penjualanDetail')->find($id);
+
+        $pdf = Pdf::loadView('penjualan.export_pdfdtl', ['penjualan' => $penjualan]);
+        $pdf->setPaper('a4', 'potrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render();
+
+        return $pdf->stream('Data Detail Penjualan ' . date('Y-m-d H:i:s') . '.pdf');
+    }
+
+    public function export_exceldtl(string $id)
+    {
+        $penjualan = PenjualanModel::with('penjualanDetail')->find($id);
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A2', 'ID:');
+        $sheet->setCellValue('B2', $penjualan->penjualan_id);
+        $sheet->setCellValue('D2', 'User:');
+        $sheet->setCellValue('E2', $penjualan->user->nama);
+        $sheet->setCellValue('G2', 'Penjualan Kode:');
+        $sheet->setCellValue('H2', $penjualan->penjualan_kode);
+        $sheet->setCellValue('A4', 'Pembeli:');
+        $sheet->setCellValue('B4', $penjualan->pembeli);
+        $sheet->setCellValue('D4', 'Tanggal Penjualan:');
+        $sheet->setCellValue('E4', $penjualan->penjualan_tanggal);
+
+        $sheet->getStyle('A2:A4')->getFont()->setBold(true);
+        $sheet->getStyle('D2:D4')->getFont()->setBold(true);
+        $sheet->getStyle('G2')->getFont()->setBold(true);
+
+        $sheet->setCellValue('A6', 'No');
+        $sheet->setCellValue('B6', 'Barang');
+        $sheet->setCellValue('C6', 'Jumlah');
+        $sheet->setCellValue('D6', 'Harga');
+
+        $sheet->getStyle('A6:F6')->getFont()->setBold(true);
+        $no = 1;
+        $baris = 7;
+        $totalHarga = 0;
+        foreach ($penjualan->penjualanDetail as $key => $value) {
+            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('B' . $baris, $value->barang->barang_nama);
+            $sheet->setCellValue('C' . $baris, $value->jumlah);
+            $sheet->setCellValue('D' . $baris, $value->harga);
+            $baris++;
+            $no++;
+            $totalHarga += $value->harga;
+        }
+
+        foreach (range('A', 'G') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+        $sheet->setCellValue('C' . $baris, 'Total');
+        $sheet->setCellValue('D' . $baris, $totalHarga);
+        $sheet->getStyle('C' . $baris . ':D' . $baris)->getFont()->setBold(true);
+
+        $lastRow = $baris;
+        $sheet->getStyle('A6:D' . $lastRow)->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ]);
+
+        $sheet->setTitle('Data Detail Penjualan');
+
+        $write = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Data Detail Penjualan' . date('Y-m-d H:i:s') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        header('Cache-Control: max-age=1');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last Modified: ' . gmdate('D, d M Y H:i:s') . 'GMT');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+
+        $write->save('php://output');
+        exit;
+    }
 }

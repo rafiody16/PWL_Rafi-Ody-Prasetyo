@@ -8,6 +8,15 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="card-tools">
+                    <a class="btn btn-sm btn-primary mt-1"
+                        href="{{ url('/penjualan/' . $penjualan->penjualan_id . '/export_exceldtl') }}"><i
+                            class="fa fa-file-excel">Export Detail Penjualan</i></a>
+                    <a class="btn btn-sm btn-warning mt-1"
+                        href="{{ url('/penjualan/' . $penjualan->penjualan_id . '/export_pdfdtl') }}"><i
+                            class="fa fa-file-pdf">Export Detail Penjualan</i></a>
+                </div>
+                <br>
                 <table class="table table-sm table-bordered">
                     <tr>
                         <th class="text-left col-3">ID :</th>
