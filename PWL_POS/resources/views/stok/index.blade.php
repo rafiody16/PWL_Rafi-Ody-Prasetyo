@@ -39,15 +39,6 @@
                             <small class="form-text text-muted">Supplier stok</small>
                         </div>
                         <div class="col-3">
-                            <select class="form-control" id="barang_id" name="barang_id" required>
-                                <option value="">- Barang -</option>
-                                @foreach ($barang as $item)
-                                    <option value="{{ $item->barang_id }}">{{ $item->barang_nama }}</option>
-                                @endforeach
-                            </select>
-                            <small class="form-text text-muted">Barang stok</small>
-                        </div>
-                        <div class="col-3">
                             <select class="form-control" id="user_id" name="user_id" required>
                                 <option value="">- User -</option>
                                 @foreach ($user as $item)
@@ -98,7 +89,6 @@
                         "type": "POST",
                         "data": function(d) {
                             d.supplier_id = $('#supplier_id').val();
-                            d.barang_id = $('#barang_id').val();
                             d.user_Id = $('#user_id').val();
                         }
                     },
@@ -151,9 +141,6 @@
                 });
 
                 $('#supplier_id').on('change', function() {
-                    dataStok.ajax.reload();
-                });
-                $('#barang_id').on('change', function() {
                     dataStok.ajax.reload();
                 });
                 $('#user_id').on('change', function() {
