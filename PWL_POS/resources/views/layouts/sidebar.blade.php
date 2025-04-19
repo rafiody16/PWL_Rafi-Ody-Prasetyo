@@ -1,15 +1,23 @@
 <div class="sidebar">
-    <!-- SidebarSearch Form -->
-    <div class="form-inline mt-2">
-        <div class="input-group" data-widget="sidebar-search">
-            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-            <div class="input-group-append">
-                <button class="btn btn-sidebar">
-                    <i class="fas fa-search fa-fw"></i>
-                </button>
+    <div class="form-inline mt-2 mb-3 d-flex align-items-center px-3">
+        @auth
+            <div class="image me-2">
+                <img src="{{ auth()->user()->foto ? asset('storage/profile/' . auth()->user()->foto) : asset('images/default.jpeg') }}"
+                    alt="User Image" class="img-circle elevation-2" style="width: 30px; height: 30px; object-fit: cover;">
             </div>
-        </div>
+            <pre></pre>
+            <div class="d-flex flex-column">
+                <h6 class="text-white font-weight-bold mb-0">
+                    {{ auth()->user()->nama }}
+                </h6>
+                <a href="{{ url('/profile') }}" class="text-white-50" style="font-size: 0.8rem; text-decoration: none;">lihat
+                    profile</a>
+            </div>
+        @else
+            <h6 class="text-white font-italic">Guest</h6>
+        @endauth
     </div>
+    <hr style="border-color: rgba(255,255,255,0.2); margin: 0 1rem 0.5rem 1rem;">
     <!-- Sidebar Menu -->
     <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
