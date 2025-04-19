@@ -6,7 +6,8 @@
             <h3 class="card-title">Profil Pengguna</h3>
             <div class="card-tools">
                 <button onclick="modalAction('{{ route('profile.edit') }}')" class="btn btn-primary">Edit Foto Profil</button>
-                <button onclick="modalAction('{{ route('profile.edit_password') }}')" class="btn btn-warning">Ubah
+                <button onclick="modalAction('{{ route('profile.edit_data') }}')" class="btn btn-success">Edit Data</button>
+                <button onclick="modalAction('{{ route('profile.edit_password') }}')" class="btn btn-warning">Edit
                     Password</button>
             </div>
         </div>
@@ -28,7 +29,7 @@
 
                 </div>
                 <div class="col-md-9 text-secondary">
-                    <p><strong class="text-dark">ID Level:</strong> {{ $user->level_id }}</p>
+                    <p><strong class="text-dark">ID User:</strong> {{ $user->user_id }}</p>
                     <p><strong class="text-dark">Username:</strong> {{ $user->username }}</p>
                     <p><strong class="text-dark">Nama:</strong> {{ $user->nama }}</p>
                     <p><strong class="text-dark">Role:</strong> {{ $user->level->level_nama ?? 'Tidak diketahui' }}</p>
