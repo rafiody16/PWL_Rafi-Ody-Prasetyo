@@ -365,4 +365,70 @@ class PenjualanController extends Controller
         }
         return redirect('/');
     }
+
+    public function export_pdf()
+    {
+        $penjualan = PenjualanModel::select('user_id', 'pembeli', 'penjualan_kode', 'penjualan_tanggal')
+            ->orderBy('user_id')
+            ->with('user')
+            ->get();
+
+        $pdf = Pdf::loadView('penjualan.export_pdf', ['penjualan' => $penjualan]);
+        $pdf->setPaper('a4', 'potrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render();
+
+        return $pdf->stream('Data Penjualan ' . date('Y-m-d H:i:s') . '.pdf');
+    }
+
+    public function export_excel()
+    {
+        $penjualan = PenjualanModel::select('user_id', 'pembeli', 'penjualan_kode', 'penjualan_tanggal')
+            ->orderBy('user_id')
+            ->with('user')
+            ->get();
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'User');
+        $sheet->setCellValue('C1', 'Pembeli');
+        $sheet->setCellValue('D1', 'Penjualan Kode');
+        $sheet->setCellValue('E1', 'Penjualan Tanggal');
+
+        $sheet->getStyle('A1:F1')->getFont()->setBold(true);
+        $no = 1;
+        $baris = 2;
+        foreach ($penjualan as $key => $value) {
+            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('B' . $baris, $value->user->nama);
+            $sheet->setCellValue('C' . $baris, $value->pembeli);
+            $sheet->setCellValue('D' . $baris, $value->penjualan_kode);
+            $sheet->setCellValue('E' . $baris, $value->penjualan_tanggal);
+            $baris++;
+            $no++;
+        }
+
+        foreach (range('A', 'F') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $sheet->setTitle('Data Penjualan');
+
+        $write = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Data Penjualan' . date('Y-m-d H:i:s') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        header('Cache-Control: max-age=1');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last Modified: ' . gmdate('D, d M Y H:i:s') . 'GMT');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+
+        $write->save('php://output');
+        exit;
+    }
 }
