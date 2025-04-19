@@ -6,6 +6,8 @@
             <h3 class="card-title">Profil Pengguna</h3>
             <div class="card-tools">
                 <button onclick="modalAction('{{ route('profile.edit') }}')" class="btn btn-primary">Edit Foto Profil</button>
+                <button onclick="modalAction('{{ route('profile.edit_password') }}')" class="btn btn-warning">Ubah
+                    Password</button>
             </div>
         </div>
 
@@ -41,6 +43,13 @@
 
 @push('js')
     <script>
+        function modalAction(url = '') {
+            $('#myModal').load(url, function() {
+                $('#myModal').modal('show');
+            });
+        }
+        var dataProfile;
+
         function modalAction(url = '') {
             console.log("Fetching modal from:", url);
             $('#myModal').load(url, function(response, status, xhr) {

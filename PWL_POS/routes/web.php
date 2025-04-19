@@ -75,6 +75,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/edit_password', [ProfileController::class, 'edit_password'])->name('profile.edit_password');
+    Route::put('/profile/{id}/update_password', [ProfileController::class, 'update_password']);
 
     Route::middleware(['authorize:ADM'])->group(function () {
         Route::group(['prefix' => 'user'], function () {
