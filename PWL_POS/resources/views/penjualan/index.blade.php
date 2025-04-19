@@ -80,7 +80,7 @@
                         "dataType": "json",
                         "type": "POST",
                         "data": function(d) {
-                            d.user_Id = $('#user_id').val();
+                            d.user_id = $('#user_id').val();
                         }
                     },
                     columns: [{
@@ -123,13 +123,6 @@
                             searchable: false
                         }
                     ]
-                });
-
-                $('#supplier_id').on('change', function() {
-                    dataPenjualan.ajax.reload();
-                });
-                $('#barang_id').on('change', function() {
-                    dataPenjualan.ajax.reload();
                 });
                 $('#user_id').on('change', function() {
                     dataPenjualan.ajax.reload();
