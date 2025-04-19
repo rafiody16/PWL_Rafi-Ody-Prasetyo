@@ -11,7 +11,11 @@ use App\Models\PenjualanDetailModel;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Barryvdh\DomPDF\Facade\Pdf;
 use PhpParser\Node\Stmt\Catch_;
+use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Facades\Log;
 
 class PenjualanController extends Controller
@@ -285,6 +289,77 @@ class PenjualanController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'Data tidak ditemukan'
+                ]);
+            }
+        }
+        return redirect('/');
+    }
+
+    public function import()
+    {
+        return view('penjualan.import');
+    }
+
+    public function import_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                // validasi file harus xls atau xlsx, max 1MB
+                'file_penjualan' => ['required', 'mimes:xlsx', 'max:1024']
+            ];
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+            $file = $request->file('file_penjualan'); // ambil file dari request
+            $reader = IOFactory::createReader('Xlsx'); // load reader file excel
+            $reader->setReadDataOnly(true); // hanya membaca data
+            $spreadsheet = $reader->load($file->getRealPath()); // load file excel
+            $sheet = $spreadsheet->getActiveSheet(); // ambil sheet yang aktif
+            $data = $sheet->toArray(null, false, true, true); // ambil data excel
+            $insert = [];
+
+            DB::beginTransaction();
+            if (count($data) > 1) { // jika data lebih dari 1 baris
+                foreach ($data as $baris => $value) {
+                    if ($baris > 1) { // baris ke 1 adalah header, maka lewati
+                        $kode = $value['A'];
+
+                        if (!isset($insert[$kode])) {
+                            $penjualan = PenjualanModel::create([
+                                'penjualan_kode' => $kode,
+                                'pembeli' => $value['B'],
+                                'user_id' => $value['C'],
+                                'penjualan_tanggal' => is_numeric($value['D'])
+                                    ? Date::excelToDateTimeObject($value['D'])->format('Y-m-d')
+                                    : Carbon::parse($value['D'])->format('Y-m-d'),
+                            ]);
+                            $insert[$kode] = $penjualan->penjualan_id;
+                        }
+
+                        PenjualanDetailModel::create([
+                            'penjualan_id' => $insert[$kode],
+                            'barang_id' => $value['E'],
+                            'jumlah' => $value['F'],
+                            'harga' => $value['G'] * $value['F']
+                        ]);
+                        DB::table('t_stok')->where('barang_id', $value['E'])->decrement('stok_jumlah', $value['F']);
+                    }
+                }
+                DB::commit();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil diimport'
+                ]);
+            } else {
+                DB::rollBack();
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Tidak ada data yang diimport'
                 ]);
             }
         }
