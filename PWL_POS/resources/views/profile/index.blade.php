@@ -20,7 +20,7 @@
 
             <div class="row">
                 <div class="col-md-3 text-center">
-                    <img src="{{ $user->profile_picture ? asset('storage/profile_images/' . $user->profile_picture) : asset('images/default.jpeg') }}"
+                    <img src="{{ $user->picture ? asset('storage/profile_images/' . $user->picture) : asset('images/default.jpeg') }}"
                         class="img-circle elevation-2" alt="User Image"
                         style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #ddd; border-radius: 50%;">
 

@@ -34,17 +34,17 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'profile_picture' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            'picture' => 'required|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
         $user = Auth::user();
 
         // Simpan file baru
-        if ($request->hasFile('profile_picture')) {
-            $filename = 'photo_' . $user->user_id . '.' . $request->file('profile_picture')->getClientOriginalExtension();
-            $path = $request->file('profile_picture')->storeAs('public/profile_images', $filename);
+        if ($request->hasFile('picture')) {
+            $filename = 'photo_' . $user->user_id . '.' . $request->file('picture')->getClientOriginalExtension();
+            $path = $request->file('picture')->storeAs('storage/profile_images', $filename);
 
-            $user->profile_picture = $filename;
+            $user->picture = $filename;
             $user->save();
         }
 

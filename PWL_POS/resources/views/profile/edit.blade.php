@@ -11,14 +11,13 @@
 
             <div class="modal-body">
                 <div class="form-group text-center">
-                    <img src="{{ asset('storage/profile_images/' . ($user->profile_picture ?? 'anonymous.png')) }}"
+                    <img src="{{ $user->picture ? asset('storage/profile_images/' . $user->picture) : asset('images/default.jpeg') }}"
                         class="img-thumbnail mb-3"
                         style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;">
                     <div>
-                        <label for="profile_picture">Pilih Foto Profil Baru</label>
-                        <input type="file" name="profile_picture" id="profile_picture" class="form-control-file"
-                            required>
-                        <small id="error-profile_picture" class="error-text form-text text-danger"></small>
+                        <label for="picture">Pilih Foto Profil Baru</label>
+                        <input type="file" name="picture" id="picture" class="form-control-file" required>
+                        <small id="error-picture" class="error-text form-text text-danger"></small>
                     </div>
                 </div>
             </div>
@@ -35,7 +34,7 @@
     $(document).ready(function() {
         $("#form-edit-profile").validate({
             rules: {
-                profile_picture: {
+                picture: {
                     required: true,
                     extension: "jpg|jpeg|png"
                 }

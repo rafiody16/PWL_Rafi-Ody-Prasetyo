@@ -2,7 +2,7 @@
     <div class="form-inline mt-2 mb-3 d-flex align-items-center px-3">
         @auth
             <div class="image me-2">
-                <img src="{{ auth()->user()->foto ? asset('storage/profile/' . auth()->user()->foto) : asset('images/default.jpeg') }}"
+                <img src="{{ auth()->user()->picture ? asset('storage/profile_images/' . auth()->user()->picture) : asset('images/default.jpeg') }}"
                     alt="User Image" class="img-circle elevation-2" style="width: 30px; height: 30px; object-fit: cover;">
             </div>
             <pre></pre>
