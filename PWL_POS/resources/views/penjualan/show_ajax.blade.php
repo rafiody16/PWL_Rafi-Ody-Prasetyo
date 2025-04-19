@@ -45,15 +45,21 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php $totalHrg = 0; ?>
                         @foreach ($penjualan->penjualanDetail as $index => $p)
                             <tr>
                                 <td>{{ 1 + $index++ }}</td>
                                 <td>{{ $p->barang->barang_nama }}</td>
                                 <td>{{ $p->jumlah }}</td>
-                                <td>{{ $p->harga }}</td>
+                                <td>Rp. {{ number_format($p->harga, 0, ',', '.') }}</td>
                             </tr>
+                            <?php $totalHrg += $p->harga; ?>
                         @endforeach
                     </tbody>
+                    <tfoot>
+                        <td colspan="3" class="text-end"><strong>Total Harga</strong></td>
+                        <td><strong>Rp. {{ number_format($totalHrg, 0, ',', '.') }}</strong></td>
+                    </tfoot>
                 </table>
             </div>
             <div class="modal-footer">
