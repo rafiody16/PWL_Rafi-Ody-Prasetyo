@@ -89,7 +89,7 @@
                         "type": "POST",
                         "data": function(d) {
                             d.supplier_id = $('#supplier_id').val();
-                            d.user_Id = $('#user_id').val();
+                            d.user_id = $('#user_id').val();
                         }
                     },
                     columns: [{
