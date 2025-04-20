@@ -8,9 +8,9 @@
                 <button onclick="modalAction('{{ url('/kategori/import') }}')" class="btn btn-sm btn-info mt-1">
                     Import Barang
                 </button>
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('kategori/create') }}">Tambah</a>
-                <button onclick="modalAction('{{ url('kategori/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah
-                    Ajax</button>
+                {{-- <a class="btn btn-sm btn-primary mt-1" href="{{ url('kategori/create') }}">Tambah</a> --}}
+                <button onclick="modalAction('{{ url('kategori/create_ajax') }}')"
+                    class="btn btn-sm btn-success mt-1">Tambah</button>
                 <a class="btn btn-sm btn-primary mt-1" href="{{ url('/kategori/export_excel') }}"><i
                         class="fa fa-file-excel">Export Kategori</i></a>
                 <a class="btn btn-sm btn-warning mt-1" href="{{ url('/kategori/export_pdf') }}"><i

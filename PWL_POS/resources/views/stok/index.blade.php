@@ -13,8 +13,8 @@
                         class="fa fa-file-excel">Export stok</i></a>
                 <a class="btn btn-sm btn-warning mt-1" href="{{ url('/stok/export_pdf') }}"><i class="fa fa-file-pdf">Export
                         stok</i></a>
-                <button onclick="modalAction('{{ url('stok/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah
-                    Ajax</button>
+                <button onclick="modalAction('{{ url('stok/create_ajax') }}')"
+                    class="btn btn-sm btn-success mt-1">Tambah</button>
             </div>
         </div>
         <div class="card-body">

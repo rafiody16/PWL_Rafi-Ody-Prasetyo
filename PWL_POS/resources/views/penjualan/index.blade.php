@@ -15,8 +15,7 @@
                         class="fa fa-file-pdf">Export
                         penjualan</i></a>
                 <button onclick="modalAction('{{ url('penjualan/create_ajax') }}')"
-                    class="btn btn-sm btn-success mt-1">Tambah
-                    Ajax</button>
+                    class="btn btn-sm btn-success mt-1">Tambah</button>
             </div>
         </div>
         <div class="card-body">
