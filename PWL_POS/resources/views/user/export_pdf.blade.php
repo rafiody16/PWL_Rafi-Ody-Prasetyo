@@ -29,9 +29,9 @@
 
         img.image {
             width: auto;
-            height: 80px;
-            max-width: 150px;
-            max-height: 150px;
+            height: 30px;
+            max-width: 30px;
+            max-height: 30px;
         }
 
         .text-right {
@@ -77,18 +77,16 @@
 <body>
     <table class="border-bottom-header">
         <tr>
-            <td width="15%" class="text-center"><img src="{{ asset('polinema-bw.png') }}"></td>
-
-            <td width="85%">
-                <span class="text-center d-block font-11 font-bold mb-1">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN
+            <td width="15%" class="text-center align-top" style="vertical-align: top;">
+                <img src="{{ public_path('polinema-bw.png') }}" style="height: 90px;">
+            </td>
+            <td width="85%" style="text-align: center;">
+                <span class="d-block font-11 font-bold mb-1">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN
                     TEKNOLOGI</span>
-                <span class="text-center d-block font-13 font-bold mb-1">POLITEKNIK NEGERI
-                    MALANG</span>
-                <span class="text-center d-block font-10">Jl. Soekarno-Hatta No. 9 Malang
-                    65141</span>
-                <span class="text-center d-block font-10">Telepon (0341) 404424 Pes. 101-
-                    105, 0341-404420, Fax. (0341) 404420</span>
-                <span class="text-center d-block font-10">Laman: www.polinema.ac.id</span>
+                <span class="d-block font-13 font-bold mb-1">POLITEKNIK NEGERI MALANG</span>
+                <span class="d-block font-10">Jl. Soekarno-Hatta No. 9 Malang 65141</span>
+                <span class="d-block font-10">Telepon (0341) 404424 Pes. 101-105, 0341-404420, Fax. (0341) 404420</span>
+                <span class="d-block font-10">Laman: www.polinema.ac.id</span>
             </td>
         </tr>
     </table>

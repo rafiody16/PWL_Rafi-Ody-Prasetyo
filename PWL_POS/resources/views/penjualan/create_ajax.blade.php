@@ -10,13 +10,15 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>User</label>
-                    <select name="user_id" id="user_id" class="form-control" required>
+                    {{-- <select name="user_id" id="user_id" class="form-control" required>
                         <option value="">- Pilih User -</option>
                         @foreach ($user as $l)
                             <option value="{{ $l->user_id }}">{{ $l->nama }}</option>
                         @endforeach
                     </select>
-                    <small id="error-kategori_id" class="error-text form-text text-danger"></small>
+                    <small id="error-kategori_id" class="error-text form-text text-danger"></small> --}}
+                    <input type="hidden" value="{{ auth()->user()->user_id }}" name="user_id" id="user_id">
+                    <h4>{{ auth()->user()->nama }}</h4>
                 </div>
                 <div class="form-group">
                     <label>Pembeli</label>
