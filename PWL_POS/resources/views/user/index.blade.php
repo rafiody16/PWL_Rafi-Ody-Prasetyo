@@ -29,7 +29,7 @@
                 <div class="col-md-12">
                     <div class="form-group row">
                         <label class="col-1 control-label col-form-label">Filter:</label>
-                        <div class="col-3">
+                        {{-- <div class="col-3">
                             <select class="form-control" id="level_id" name="level_id" required>
                                 <option value="">- Semua -</option>
                                 @foreach ($level as $item)
@@ -37,7 +37,7 @@
                                 @endforeach
                             </select>
                             <small class="form-text text-muted">Level Pengguna</small>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                         <th>ID</th>
                         <th>Username</th>
                         <th>Nama</th>
-                        <th>Level Pengguna</th>
+                        {{-- <th>Level Pengguna</th> --}}
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -99,12 +99,6 @@
                         className: "",
                         orderable: true,
                         searchable: true
-                    }, {
-                        // mengambil data level hasil dari ORM berelasi
-                        data: "level.level_nama",
-                        className: "",
-                        orderable: false,
-                        searchable: false
                     }, {
                         data: "aksi",
                         className: "",

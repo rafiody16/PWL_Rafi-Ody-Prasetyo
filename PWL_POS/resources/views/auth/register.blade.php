@@ -119,7 +119,7 @@
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" placeholder="Password" required />
                 </div>
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="password">Level</label>
                     <select class="form-control" id="level_id" name="level_id" required>
                         <option value="">- Pilih Level -</option>
@@ -130,7 +130,7 @@
                     @error('level_id')
                         <small class="form-text text-danger">{{ $message }}</small>
                     @enderror
-                </div>
+                </div> --}}
                 <button type="submit">Register</button>
             </form>
         </div>

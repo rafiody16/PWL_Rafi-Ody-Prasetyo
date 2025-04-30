@@ -254,8 +254,7 @@ class UserController extends Controller
 
     public function list(Request $request)
     {
-        $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
-            ->with('level');
+        $users = UserModel::select('user_id', 'username', 'nama')->get();
 
         // Filter data berdasarkan level_id
         if ($request->level_id) {
